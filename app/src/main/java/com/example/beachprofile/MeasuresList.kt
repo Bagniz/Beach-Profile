@@ -56,7 +56,6 @@ fun MeasuresList(
                 FloatingActionButton(
                     onClick = {
                         showAddMeasureDialog.value = true
-                        startRegistering()
                     },
                     shape = CircleShape,
                     containerColor = MaterialTheme.colorScheme.primary

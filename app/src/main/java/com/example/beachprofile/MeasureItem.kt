@@ -36,14 +36,13 @@ fun MeasureItem(measure: Measure) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(
+                text = "θ %.2f°".format(measure.inclination),
+                style = MaterialTheme.typography.headlineSmall
+            )
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "θ %.2f°".format(measure.inclination),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = "λ %.4f°".format(measure.longitude),
                     style = MaterialTheme.typography.headlineSmall

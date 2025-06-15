@@ -1,6 +1,5 @@
 package com.example.beachprofile
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,18 +43,14 @@ fun AddMeasureForm(
 ) {
     var transcription = remember { mutableStateOf("Press to start transcribing") }
     var saveLocationValues by remember { mutableStateOf(false) }
-
-    Log.i(
-        "${inclination.floatValue}, ${longitude.doubleValue}, ${latitude.doubleValue}",
-        "ADD MEASURE"
-    )
+    startRegistering()
 
     Dialog(onDismissRequest = { showAddMeasureDialog.value = false }) {
         Surface(shape = RoundedCornerShape(16.dp)) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 2.dp),
+                    .padding(vertical = 16.dp, horizontal = 8.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -65,12 +60,11 @@ fun AddMeasureForm(
                     style = MaterialTheme.typography.headlineSmall
                 )
                 Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = "θ %.2f°".format(inclination.floatValue),
+                    style = MaterialTheme.typography.headlineSmall,
+                )
                 Row {
-                    Text(
-                        text = "θ %.2f°".format(inclination.floatValue),
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = "λ %.4f°".format(longitude.doubleValue),
                         style = MaterialTheme.typography.headlineSmall

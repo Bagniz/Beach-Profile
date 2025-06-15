@@ -26,10 +26,14 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
     private lateinit var locationManager: LocationManager
     private lateinit var sensorManager: SensorManager
     private lateinit var accelerometer: Sensor
+    private lateinit var magnetometer: Sensor
 
-    private val accelValues = FloatArray(3)
-    private val magnetValues = FloatArray(3)
-    private var hasAccel = false
+    private val gravity = FloatArray(3)
+    private val geomagnetic = FloatArray(3)
+    private val rotationMatrix = FloatArray(9)
+    private val inclinationMatrix = FloatArray(9)
+    private val orientationAngles = FloatArray(3)
+    private var hasGravity = false
     private var hasMagnet = false
 
     private var inclination = mutableFloatStateOf(0f)
@@ -43,6 +47,7 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
+        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)!!
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED ||
@@ -73,24 +78,20 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
 
         when (event.sensor.type) {
             Sensor.TYPE_ACCELEROMETER -> {
-                System.arraycopy(event.values, 0, accelValues, 0, event.values.size)
-                hasAccel = true
+                event.values.copyInto(gravity)
+                hasGravity = true
             }
 
             Sensor.TYPE_MAGNETIC_FIELD -> {
-                System.arraycopy(event.values, 0, magnetValues, 0, event.values.size)
+                event.values.copyInto(geomagnetic)
                 hasMagnet = true
             }
         }
 
-        if (hasAccel && hasMagnet) {
-            val r = FloatArray(9)
-            val i = FloatArray(9)
-
-            if (SensorManager.getRotationMatrix(r, i, accelValues, magnetValues)) {
-                val orientation = FloatArray(3)
-                SensorManager.getOrientation(r, orientation)
-                val pitch = Math.toDegrees(orientation[1].toDouble()).toFloat()
+        if (hasGravity && hasMagnet) {
+            if (SensorManager.getRotationMatrix(rotationMatrix, inclinationMatrix, gravity, geomagnetic)) {
+                SensorManager.getOrientation(rotationMatrix, orientationAngles)
+                val pitch = Math.toDegrees(orientationAngles[1].toDouble()).toFloat()
                 inclination.floatValue = pitch
             }
         }
@@ -100,9 +101,10 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
         ) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 1f, this)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100L, 1f, this)
         }
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI)
     }
 
     fun stopRegistering() {
