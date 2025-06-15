@@ -1,4 +1,4 @@
-package com.example.beachprofile.models
+package com.example.beachprofile.measures
 
 import java.time.LocalDateTime
 

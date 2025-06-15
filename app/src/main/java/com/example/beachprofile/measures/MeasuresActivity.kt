@@ -1,4 +1,4 @@
-package com.example.beachprofile
+package com.example.beachprofile.measures
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -48,6 +48,8 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
 
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)!!
+
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED ||
@@ -102,9 +104,9 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
             == PackageManager.PERMISSION_GRANTED
         ) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100L, 1f, this)
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
+            sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI)
         }
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
-        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI)
     }
 
     fun stopRegistering() {

@@ -1,4 +1,4 @@
-package com.example.beachprofile
+package com.example.beachprofile.measures
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.beachprofile.models.Measure
 
 @Composable
 fun MeasuresList(
@@ -35,7 +34,7 @@ fun MeasuresList(
     latitude: MutableDoubleState,
     longitude: MutableDoubleState,
     startRegistering: () -> Unit,
-    stopRegistering: () -> Unit
+    stopRegistering: () -> Unit,
 ) {
     var measures = remember { mutableStateListOf<Measure>() }
     var showAddMeasureDialog = remember { mutableStateOf(false) }
@@ -86,7 +85,7 @@ fun MeasuresList(
                 latitude,
                 longitude,
                 startRegistering,
-                stopRegistering
+                stopRegistering,
             )
         }
     }

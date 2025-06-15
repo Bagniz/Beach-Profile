@@ -1,4 +1,4 @@
-package com.example.beachprofile
+package com.example.beachprofile.sessions
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.beachprofile.models.Session
 import java.time.LocalDateTime
 
 @Composable

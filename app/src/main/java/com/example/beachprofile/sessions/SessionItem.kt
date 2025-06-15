@@ -1,4 +1,4 @@
-package com.example.beachprofile
+package com.example.beachprofile.sessions
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Row
@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.beachprofile.models.Session
+import com.example.beachprofile.measures.MeasuresActivity
 
 @Composable
 fun SessionItem(session: Session) {

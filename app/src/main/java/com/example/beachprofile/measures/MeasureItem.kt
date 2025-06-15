@@ -1,4 +1,4 @@
-package com.example.beachprofile
+package com.example.beachprofile.measures
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.beachprofile.models.Measure
+import com.example.beachprofile.sessions.FORMATTER
 
 @Composable
 fun MeasureItem(measure: Measure) {

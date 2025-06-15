@@ -1,4 +1,4 @@
-package com.example.beachprofile
+package com.example.beachprofile.measures
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.beachprofile.models.Measure
 import java.time.LocalDateTime
 
 @Composable
@@ -39,7 +38,7 @@ fun AddMeasureForm(
     latitude: MutableDoubleState,
     longitude: MutableDoubleState,
     startRegistering: () -> Unit,
-    stopRegistering: () -> Unit
+    stopRegistering: () -> Unit,
 ) {
     var transcription = remember { mutableStateOf("Press to start transcribing") }
     var saveLocationValues by remember { mutableStateOf(false) }

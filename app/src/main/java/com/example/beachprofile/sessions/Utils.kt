@@ -1,4 +1,4 @@
-package com.example.beachprofile
+package com.example.beachprofile.sessions
 
 import java.time.format.DateTimeFormatter
 

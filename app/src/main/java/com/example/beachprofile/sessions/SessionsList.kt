@@ -1,4 +1,4 @@
-package com.example.beachprofile
+package com.example.beachprofile.sessions
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.beachprofile.models.Session
 
 @Composable
 fun SessionsList(innerPaddingValues: PaddingValues) {
