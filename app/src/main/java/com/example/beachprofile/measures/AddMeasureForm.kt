@@ -38,7 +38,7 @@ fun AddMeasureForm(
     latitude: MutableDoubleState,
     longitude: MutableDoubleState,
     startRegistering: () -> Unit,
-    stopRegistering: () -> Unit,
+    stopRegistering: () -> Unit
 ) {
     var transcription = remember { mutableStateOf("Press to start transcribing") }
     var saveLocationValues by remember { mutableStateOf(false) }

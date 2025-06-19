@@ -34,7 +34,7 @@ fun MeasuresList(
     latitude: MutableDoubleState,
     longitude: MutableDoubleState,
     startRegistering: () -> Unit,
-    stopRegistering: () -> Unit,
+    stopRegistering: () -> Unit
 ) {
     var measures = remember { mutableStateListOf<Measure>() }
     var showAddMeasureDialog = remember { mutableStateOf(false) }
@@ -85,7 +85,7 @@ fun MeasuresList(
                 latitude,
                 longitude,
                 startRegistering,
-                stopRegistering,
+                stopRegistering
             )
         }
     }

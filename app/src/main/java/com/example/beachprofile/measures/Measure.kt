@@ -1,11 +1,17 @@
 package com.example.beachprofile.measures
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 
+@Entity
 data class Measure(
-    var inclination: Float,
-    var longitude: Double,
-    var latitude: Double,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    val sessionId: Int,
+    val inclination: Float,
+    val longitude: Double,
+    val latitude: Double,
     val note: String,
     val timestamp: LocalDateTime
 )
