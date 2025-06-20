@@ -1,21 +1,20 @@
 package com.example.beachprofile.sessions
 
+import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Entity
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
-@Entity
+@Dao
 interface SessionDao {
     @Query("SELECT * FROM session")
-    fun findAll(): List<Session>
+    fun findAll(): Flow<List<Session>>
 
-    @Query("SELECT * FROM session WHERE id = :id")
-    fun findById(id: Int): Session
-
-    @Insert
-    fun insertSession(session: Session)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSession(session: Session)
 
     @Delete
-    fun deleteSession(id: Int)
+    suspend fun deleteSession(session: Session)
 }

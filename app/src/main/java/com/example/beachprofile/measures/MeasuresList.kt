@@ -20,15 +20,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableDoubleState
 import androidx.compose.runtime.MutableFloatState
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.MutableCreationExtras
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun MeasuresList(
+    sessionId: Int,
     innerPaddingValues: PaddingValues,
     inclination: MutableFloatState,
     latitude: MutableDoubleState,
@@ -36,8 +41,14 @@ fun MeasuresList(
     startRegistering: () -> Unit,
     stopRegistering: () -> Unit
 ) {
-    var measures = remember { mutableStateListOf<Measure>() }
+    val extras = MutableCreationExtras()
+    extras[MeasureViewModel.CONTEXT_KEY] = LocalContext.current
+    extras[MeasureViewModel.SESSION_KEY] = sessionId
+
+    val measuresModel: MeasureViewModel = viewModel(factory = MeasureViewModel.Factory, extras = extras)
+    val measures by measuresModel.measures.collectAsState(initial = emptyList())
     var showAddMeasureDialog = remember { mutableStateOf(false) }
+
 
     Surface(
         modifier = Modifier
@@ -79,8 +90,9 @@ fun MeasuresList(
 
         if (showAddMeasureDialog.value) {
             AddMeasureForm(
+                sessionId,
+                measuresModel,
                 showAddMeasureDialog,
-                measures,
                 inclination,
                 latitude,
                 longitude,

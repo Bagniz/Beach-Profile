@@ -67,7 +67,7 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
         setContent {
             BeachProfileTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
-                    MeasuresList(it, inclination, latitude, longitude, ::startRegistering, ::stopRegistering)
+                    MeasuresList(intent.getIntExtra("sessionId", 0), it, inclination, latitude, longitude, ::startRegistering, ::stopRegistering)
                 }
             }
         }

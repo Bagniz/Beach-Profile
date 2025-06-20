@@ -27,10 +27,14 @@ import androidx.compose.ui.window.Dialog
 import java.time.LocalDateTime
 
 @Composable
-fun AddSessionForm(showAddSessionForm: MutableState<Boolean>, sessions: MutableList<Session>) {
+fun AddSessionForm(
+    showAddSessionForm: MutableState<Boolean>,
+    sessionsModel: SessionViewModel
+) {
     var context = LocalContext.current
     var sessionName by remember { mutableStateOf<String>("") }
     var sessionDate by remember { mutableStateOf<LocalDateTime>(LocalDateTime.now()) }
+
     Dialog(onDismissRequest = { showAddSessionForm.value = false }) {
         Surface(shape = RoundedCornerShape(16.dp)) {
             Column(
@@ -58,9 +62,8 @@ fun AddSessionForm(showAddSessionForm: MutableState<Boolean>, sessions: MutableL
                     Spacer(modifier = Modifier.weight(1f))
                     Button(onClick = {
                         if (sessionName.isNotBlank()) {
-                            sessionDate = LocalDateTime.now()
-                            // TODO: Change line below
-                            sessions.add(Session(sessionName, sessionDate))
+                            val newSession = Session(name = sessionName, date = sessionDate)
+                            sessionsModel.addSession(newSession)
                             Toast.makeText(
                                 context,
                                 "Session: $sessionName created",

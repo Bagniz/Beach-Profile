@@ -44,7 +44,7 @@ fun MeasureItem(measure: Measure) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "λ %.4f°".format(measure.),
+                    text = "λ %.4f°".format(measure.longitude),
                     style = MaterialTheme.typography.headlineSmall
                 )
                 Spacer(modifier = Modifier.weight(1f))

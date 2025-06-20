@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity
 data class Session(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val name: String,
     val date: LocalDateTime
 )

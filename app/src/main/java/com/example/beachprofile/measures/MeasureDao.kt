@@ -4,18 +4,16 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MeasureDao {
-    @Query("SELECT * FROM measure WHERE id == :id")
-    fun findById(id: Int): Measure
-
     @Query("SELECT * FROM measure WHERE sessionId = :sessionId")
-    fun findBySessionId(sessionId: Int): List<Measure>
+    fun findBySessionId(sessionId: Int): Flow<List<Measure>>
 
     @Insert
-    fun insertMeasure(measure: Measure)
+    suspend fun insertMeasure(measure: Measure)
 
     @Delete
-    fun deleteMeasureById(id: Int)
+    suspend fun deleteMeasureById(measure: Measure)
 }

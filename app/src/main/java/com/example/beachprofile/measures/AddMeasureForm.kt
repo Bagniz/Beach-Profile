@@ -32,8 +32,9 @@ import java.time.LocalDateTime
 
 @Composable
 fun AddMeasureForm(
+    sessionId: Int,
+    measureModel: MeasureViewModel,
     showAddMeasureDialog: MutableState<Boolean>,
-    measures: MutableList<Measure>,
     inclination: MutableFloatState,
     latitude: MutableDoubleState,
     longitude: MutableDoubleState,
@@ -42,6 +43,7 @@ fun AddMeasureForm(
 ) {
     var transcription = remember { mutableStateOf("Press to start transcribing") }
     var saveLocationValues by remember { mutableStateOf(false) }
+
     startRegistering()
 
     Dialog(onDismissRequest = { showAddMeasureDialog.value = false }) {
@@ -113,15 +115,15 @@ fun AddMeasureForm(
                             Spacer(modifier = Modifier.weight(1f))
                             Button(onClick = {
                                 showAddMeasureDialog.value = false
-                                measures.add(
-                                    Measure(
-                                        inclination.floatValue,
-                                        longitude.doubleValue,
-                                        latitude.doubleValue,
-                                        transcription.value,
-                                        LocalDateTime.now()
-                                    )
+                                val newMeasure = Measure(
+                                    sessionId = sessionId,
+                                    inclination = inclination.floatValue,
+                                    longitude = longitude.doubleValue,
+                                    latitude = latitude.doubleValue,
+                                    note = transcription.value,
+                                    timestamp = LocalDateTime.now()
                                 )
+                                measureModel.addMeasure(newMeasure)
                             }) { Text(text = "Save") }
                         }
                     }

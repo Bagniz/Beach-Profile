@@ -23,6 +23,7 @@ fun SessionItem(session: Session) {
     Card(
         onClick = {
             val intent = Intent(context, MeasuresActivity::class.java)
+            intent.putExtra("sessionId", session.id)
             context.startActivity(intent)
         }, modifier = Modifier
             .fillMaxWidth()
