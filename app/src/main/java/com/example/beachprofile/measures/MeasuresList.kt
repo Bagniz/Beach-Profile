@@ -1,5 +1,6 @@
 package com.example.beachprofile.measures
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,7 +50,6 @@ fun MeasuresList(
     val measures by measuresModel.measures.collectAsState(initial = emptyList())
     var showAddMeasureDialog = remember { mutableStateOf(false) }
 
-
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -82,7 +82,7 @@ fun MeasuresList(
                         .padding(it)
                 ) {
                     items(measures) { measure ->
-                        MeasureItem(measure)
+                        MeasureItem(measure, measuresModel)
                     }
                 }
             }

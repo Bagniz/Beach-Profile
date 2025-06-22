@@ -16,4 +16,10 @@ class SessionViewModel(application: Application) : AndroidViewModel(application)
             sessionDao.insertSession(session)
         }
     }
+
+    fun deleteSessionById(id: Int) {
+        viewModelScope.launch {
+            sessionDao.deleteSessionById(id)
+        }
+    }
 }

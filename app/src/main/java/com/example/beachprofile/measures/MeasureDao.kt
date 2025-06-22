@@ -14,6 +14,6 @@ interface MeasureDao {
     @Insert
     suspend fun insertMeasure(measure: Measure)
 
-    @Delete
-    suspend fun deleteMeasureById(measure: Measure)
+    @Query("DELETE FROM measure WHERE id = :id")
+    suspend fun deleteMeasureById(id: Int)
 }

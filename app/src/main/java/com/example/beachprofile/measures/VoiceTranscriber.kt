@@ -62,13 +62,11 @@ fun VoiceTranscriber(transcription: MutableState<String>) {
             override fun onEndOfSpeech() {}
             override fun onEvent(eventType: Int, params: Bundle?) {}
             override fun onPartialResults(partialResults: Bundle?) {
-                Log.i("Test partial results", "LOG")
                 val partialData = partialResults
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 val partialText = partialData?.firstOrNull()
                 if (!partialText.isNullOrEmpty()) {
                     transcription.value = "$partialText…"
-                    Log.i("Partial: $partialText", "LOG")
                 }
             }
 

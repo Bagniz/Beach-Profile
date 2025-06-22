@@ -63,7 +63,7 @@ fun SessionsList(innerPaddingValues: PaddingValues) {
                         .padding(it)
                 ) {
                     items(sessions) { session ->
-                        SessionItem(session)
+                        SessionItem(session, sessionsModel)
                     }
                 }
             }

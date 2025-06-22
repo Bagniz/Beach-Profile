@@ -1,6 +1,7 @@
 package com.example.beachprofile.measures
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -18,6 +19,12 @@ class MeasureViewModel(context: Context, sessionId: Int) : ViewModel() {
     fun addMeasure(measure: Measure) {
         viewModelScope.launch {
             measureDao.insertMeasure(measure)
+        }
+    }
+
+    fun deleteMeasureById(id: Int) {
+        viewModelScope.launch {
+            measureDao.deleteMeasureById(id)
         }
     }
 
