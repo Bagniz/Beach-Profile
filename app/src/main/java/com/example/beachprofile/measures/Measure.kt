@@ -2,6 +2,7 @@ package com.example.beachprofile.measures
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.beachprofile.sessions.Session
 import java.time.LocalDateTime
@@ -12,7 +13,8 @@ import java.time.LocalDateTime
         parentColumns = ["id"],
         childColumns = ["sessionId"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["sessionId"])]
 )
 data class Measure(
     @PrimaryKey(autoGenerate = true)

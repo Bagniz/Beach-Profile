@@ -11,6 +11,10 @@ class SessionViewModel(application: Application) : AndroidViewModel(application)
     private val sessionDao = AppDatabase.getDatabase(application).sessionDao()
     val sessions: Flow<List<Session>> = sessionDao.findAll()
 
+    fun getSessionsWithMeasures(): List<SessionWithMeasures> {
+        return sessionDao.findAllWithMeasures()
+    }
+
     fun addSession(session: Session) {
         viewModelScope.launch {
             sessionDao.insertSession(session)

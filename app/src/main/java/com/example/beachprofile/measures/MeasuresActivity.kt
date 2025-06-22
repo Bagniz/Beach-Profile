@@ -20,7 +20,9 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.beachprofile.sessions.Session
 import com.example.beachprofile.ui.theme.BeachProfileTheme
+import java.time.LocalDateTime
 
 class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListener {
     private lateinit var locationManager: LocationManager
@@ -63,11 +65,24 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
             )
         }
 
+
         enableEdgeToEdge()
         setContent {
             BeachProfileTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
-                    MeasuresList(intent.getIntExtra("sessionId", 0), it, inclination, latitude, longitude, ::startRegistering, ::stopRegistering)
+                    MeasuresList(
+                        Session(
+                            intent.getIntExtra("sessionId", 0),
+                            intent.getStringExtra("sessionName")!!,
+                            LocalDateTime.parse(intent.getStringExtra("sessionDate")!!)
+                        ),
+                        it,
+                        inclination,
+                        latitude,
+                        longitude,
+                        ::startRegistering,
+                        ::stopRegistering
+                    )
                 }
             }
         }
@@ -89,7 +104,13 @@ class MeasuresActivity : ComponentActivity(), SensorEventListener, LocationListe
         }
 
         if (hasGravity && hasMagnet) {
-            if (SensorManager.getRotationMatrix(rotationMatrix, inclinationMatrix, gravity, geomagnetic)) {
+            if (SensorManager.getRotationMatrix(
+                    rotationMatrix,
+                    inclinationMatrix,
+                    gravity,
+                    geomagnetic
+                )
+            ) {
                 SensorManager.getOrientation(rotationMatrix, orientationAngles)
                 val pitch = Math.toDegrees(orientationAngles[1].toDouble()).toFloat()
                 inclination.floatValue = pitch

@@ -2,7 +2,6 @@ package com.example.beachprofile.sessions
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +40,8 @@ fun SessionItem(session: Session, sessionsModel: SessionViewModel) {
             onClick = {
                 val intent = Intent(context, MeasuresActivity::class.java)
                 intent.putExtra("sessionId", session.id)
+                intent.putExtra("sessionName", session.name)
+                intent.putExtra("sessionDate", session.date.toString())
                 context.startActivity(intent)
             }, modifier = Modifier
                 .fillMaxWidth()
