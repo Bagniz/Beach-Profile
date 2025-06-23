@@ -1,6 +1,5 @@
 package com.example.beachprofile.sessions
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -8,7 +7,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,16 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FileDownload
-import androidx.compose.material.icons.filled.SsidChart
 import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -127,8 +121,10 @@ fun SessionsList(innerPaddingValues: PaddingValues) {
 
         if (showAddSessionDialog.value) {
             AddSessionForm(showAddSessionDialog, sessionsModel) {
-                coroutineScope.launch {
-                    listState.animateScrollToItem(sessions.size - 1)
+                if (sessions.size > 5) {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(sessions.size)
+                    }
                 }
             }
         }

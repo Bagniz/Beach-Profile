@@ -38,12 +38,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.beachprofile.common.InclinationGraph
 import com.example.beachprofile.sessions.Session
 import com.example.beachprofile.sessions.convertMeasuresToCSV
 import com.example.beachprofile.sessions.saveCSVToUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -64,6 +64,7 @@ fun MeasuresList(
         viewModel(factory = MeasureViewModel.Factory, extras = extras)
     val measures by measuresModel.measures.collectAsState(initial = emptyList())
     var showAddMeasureDialog = remember { mutableStateOf(false) }
+    var showInclinationChart = remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -121,12 +122,12 @@ fun MeasuresList(
 
                     IconButton(
                         onClick = {
-                            saveCsvDocumentLauncher.launch("${session.name}.csv")
+                            showInclinationChart.value = true
                         },
                     ) {
                         Icon(
                             imageVector = Icons.Default.SsidChart,
-                            contentDescription = "Edit"
+                            contentDescription = "Chart"
                         )
                     }
                 }
@@ -156,10 +157,16 @@ fun MeasuresList(
                 startRegistering,
                 stopRegistering,
             ) {
-                coroutineScope.launch {
-                    listState.animateScrollToItem(measures.size - 1)
+                if (measures.size > 5) {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(measures.size)
+                    }
                 }
             }
+        }
+
+        if (showInclinationChart.value) {
+            InclinationGraph(showInclinationChart, measures)
         }
     }
 }

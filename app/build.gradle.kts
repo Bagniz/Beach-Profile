@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
@@ -50,6 +51,8 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.compose.material:material-icons-extended:1.6.1")
     implementation("androidx.documentfile:documentfile:1.0.1")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx.v262)
     implementation(libs.androidx.core.ktx)

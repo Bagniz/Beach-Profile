@@ -2,7 +2,6 @@ package com.example.beachprofile.sessions
 
 import android.content.Context
 import android.net.Uri
-import android.provider.DocumentsContract
 import androidx.documentfile.provider.DocumentFile
 import com.example.beachprofile.measures.Measure
 import kotlinx.coroutines.CoroutineScope
