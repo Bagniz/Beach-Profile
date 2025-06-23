@@ -42,7 +42,7 @@ fun AddMeasureForm(
     stopRegistering: () -> Unit
 ) {
     var transcription = remember { mutableStateOf("Press to start transcribing") }
-    var saveLocationValues by remember { mutableStateOf(false) }
+    var addTranscribedNote by remember { mutableStateOf(false) }
 
     startRegistering()
 
@@ -77,11 +77,24 @@ fun AddMeasureForm(
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-                if (!saveLocationValues) {
-                    Button(onClick = {
-                        saveLocationValues = true
-                        stopRegistering()
-                    }) { Text(text = "Save Location") }
+                if (!addTranscribedNote) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                        Button(onClick = {
+                            addTranscribedNote = true
+                            stopRegistering()
+                        }) { Text(text = "Add note") }
+                        Button(onClick = {
+                            val newMeasure = Measure(
+                                sessionId = sessionId,
+                                inclination = inclination.floatValue,
+                                longitude = longitude.doubleValue,
+                                latitude = latitude.doubleValue,
+                                note = "No note added",
+                                timestamp = LocalDateTime.now()
+                            )
+                            measureModel.addMeasure(newMeasure)
+                        }) {Text("Save location")}
+                    }
                 } else {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Surface(
@@ -109,7 +122,7 @@ fun AddMeasureForm(
                         Spacer(modifier = Modifier.height(10.dp))
                         Row {
                             Button(onClick = {
-                                saveLocationValues = false
+                                addTranscribedNote = false
                                 startRegistering()
                             }) { Text(text = "Edit location") }
                             Spacer(modifier = Modifier.weight(1f))

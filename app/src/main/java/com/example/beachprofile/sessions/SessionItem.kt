@@ -51,6 +51,15 @@ fun SessionItem(session: Session, sessionsModel: SessionViewModel) {
                 modifier = Modifier.padding(horizontal = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                IconButton(
+                    onClick = { showConfirmationDialog.value = true },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete",
+                        tint = Color.Red
+                    )
+                }
                 Text(
                     text = session.name,
                     style = MaterialTheme.typography.titleMedium,
@@ -63,15 +72,6 @@ fun SessionItem(session: Session, sessionsModel: SessionViewModel) {
                     text = session.date.format(FORMATTER),
                     style = MaterialTheme.typography.bodyMedium
                 )
-                IconButton(
-                    onClick = { showConfirmationDialog.value = true },
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete",
-                        tint = Color.Red
-                    )
-                }
             }
         }
     }
