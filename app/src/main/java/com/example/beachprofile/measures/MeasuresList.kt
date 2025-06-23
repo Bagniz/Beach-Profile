@@ -6,20 +6,21 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.filled.SsidChart
 import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +43,7 @@ import com.example.beachprofile.sessions.convertMeasuresToCSV
 import com.example.beachprofile.sessions.saveCSVToUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -61,6 +64,8 @@ fun MeasuresList(
         viewModel(factory = MeasureViewModel.Factory, extras = extras)
     val measures by measuresModel.measures.collectAsState(initial = emptyList())
     var showAddMeasureDialog = remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val saveCsvDocumentLauncher = rememberLauncherForActivityResult(
@@ -89,52 +94,55 @@ fun MeasuresList(
                 }
             }
         } else {
-            Scaffold(
-                content = { padding ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding)
+            Scaffold(bottomBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+
+                    IconButton(
+                        onClick = {
+                            saveCsvDocumentLauncher.launch("${session.name}.csv")
+                        }
                     ) {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                        ) {
-                            items(measures) { measure ->
-                                MeasureItem(measure, measuresModel)
-                            }
-                        }
+                        Icon(
+                            imageVector = Icons.Default.FileDownload,
+                            contentDescription = "Edit"
+                        )
+                    }
 
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            FloatingActionButton(
-                                onClick = { showAddMeasureDialog.value = true },
-                                shape = CircleShape,
-                                containerColor = MaterialTheme.colorScheme.primary
-                            ) {
-                                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
-                            }
+                    IconButton(
+                        onClick = { showAddMeasureDialog.value = true },
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                    }
 
-                            FloatingActionButton(
-                                onClick = {
-                                    saveCsvDocumentLauncher.launch("${session.name}.csv")
-                                },
-                                containerColor = MaterialTheme.colorScheme.secondary
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.FileDownload,
-                                    contentDescription = "Edit"
-                                )
-                            }
-                        }
+                    IconButton(
+                        onClick = {
+                            saveCsvDocumentLauncher.launch("${session.name}.csv")
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.SsidChart,
+                            contentDescription = "Edit"
+                        )
                     }
                 }
-            )
+            }
+            ) { it ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
+                    state = listState
+                ) {
+                    items(measures) { measure ->
+                        MeasureItem(measure, measuresModel)
+                    }
+                }
+            }
         }
 
         if (showAddMeasureDialog.value) {
@@ -146,8 +154,12 @@ fun MeasuresList(
                 latitude,
                 longitude,
                 startRegistering,
-                stopRegistering
-            )
+                stopRegistering,
+            ) {
+                coroutineScope.launch {
+                    listState.animateScrollToItem(measures.size - 1)
+                }
+            }
         }
     }
 }

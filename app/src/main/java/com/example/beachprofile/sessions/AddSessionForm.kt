@@ -29,7 +29,8 @@ import java.time.LocalDateTime
 @Composable
 fun AddSessionForm(
     showAddSessionForm: MutableState<Boolean>,
-    sessionsModel: SessionViewModel
+    sessionsModel: SessionViewModel,
+    scrollDown: () -> Unit
 ) {
     var context = LocalContext.current
     var sessionName by remember { mutableStateOf<String>("") }
@@ -64,6 +65,7 @@ fun AddSessionForm(
                         if (sessionName.isNotBlank()) {
                             val newSession = Session(name = sessionName, date = sessionDate)
                             sessionsModel.addSession(newSession)
+                            scrollDown()
                             Toast.makeText(
                                 context,
                                 "Session: $sessionName created",

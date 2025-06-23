@@ -10,17 +10,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.filled.SsidChart
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -30,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,6 +50,8 @@ fun SessionsList(innerPaddingValues: PaddingValues) {
     var showAddSessionDialog = remember { mutableStateOf<Boolean>(false) }
     val sessionsModel: SessionViewModel = viewModel()
     val sessions by sessionsModel.sessions.collectAsState(initial = emptyList())
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val folderPickerLauncher = rememberLauncherForActivityResult(
@@ -77,53 +85,52 @@ fun SessionsList(innerPaddingValues: PaddingValues) {
             }
         } else {
             Scaffold(
-                content = { padding ->
-                    Box(
+                bottomBar = {
+                    Row(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding)
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                        ) {
-                            items(sessions) { session ->
-                                SessionItem(session, sessionsModel)
+
+                        IconButton(
+                            onClick = {
+                                folderPickerLauncher.launch(null)
                             }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.FileDownload,
+                                contentDescription = "Edit"
+                            )
                         }
 
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            horizontalAlignment = Alignment.End
+                        IconButton(
+                            onClick = { showAddSessionDialog.value = true },
                         ) {
-                            FloatingActionButton(
-                                onClick = { showAddSessionDialog.value = true },
-                                shape = CircleShape,
-                                containerColor = MaterialTheme.colorScheme.primary
-                            ) {
-                                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
-                            }
-
-                            FloatingActionButton(
-                                onClick = { folderPickerLauncher.launch(null) },
-                                containerColor = MaterialTheme.colorScheme.secondary
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.FileDownload,
-                                    contentDescription = "Edit"
-                                )
-                            }
+                            Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                         }
                     }
                 }
-            )
+            ) { it ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
+                    state = listState
+                ) {
+                    items(sessions) { session ->
+                        SessionItem(session, sessionsModel)
+                    }
+                }
+            }
         }
 
         if (showAddSessionDialog.value) {
-            AddSessionForm(showAddSessionDialog, sessionsModel)
+            AddSessionForm(showAddSessionDialog, sessionsModel) {
+                coroutineScope.launch {
+                    listState.animateScrollToItem(sessions.size - 1)
+                }
+            }
         }
     }
 }
